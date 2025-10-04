@@ -120,14 +120,16 @@ SELECT * FROM CTE;
 ## CS1. KPI METRICS ANALYSIS:
 ```sql
 SELECT 
-    COUNT(DISTINCT ORDERNUMBER) AS TOTAL_ORDERS_ID,
-    COUNT(ORDERLINENUMBER) AS TOTAL_ORDERS,
+    COUNT(DISTINCT ORDER_NUMBER) AS TOTAL_ORDERS_ID,
+    COUNT(ORDER_LINE_NUMBER) AS TOTAL_ORDERS,
     SUM(QTY_ORDERS) AS TOTAL_QTY_ORDERS,
     ROUND(SUM(SALES), 0) AS TURNOVER,
     COUNT(DISTINCT COUNTRY) AS TOTAL_COUNTRY
 FROM
     ORDER_DETAILS;
 ```
+### Output:
+
 
 ## CS2. DEAL SIZE ANALYSIS BY COUNTRY:
 ```sql
@@ -139,18 +141,41 @@ FROM
 GROUP BY 1
 ORDER BY 2 DESC;
 ```
+### Output:
+| Pizza Size | Total Orders |
+|------------|--------------|
+| Medium     | 6,087,432    |
+| Small      | 2,643,077    |
+| Large      | 1,302,119    |
 
-3. SALES BY COUNTRY AND MONTH:
+
+3. SALES BY MONTH:
 ```sql
 SELECT 
-    COUNTRY,
-    MONTHNAME(ORDER_DATE),
-    ROUND(SUM(SALES), 0) AS SALES_$
+    
+    MONTHNAME(ORDER_DATE) AS MONTH,
+    ROUND(SUM(SALES), 0) AS 'Total REV'
 FROM 
     ORDER_DETAILS
 GROUP BY 1, 2
 ORDER BY 3 DESC;
 ```
+### Output:
+| Month      | Total REV |
+|------------|--------------|
+| November   | 2,118,886    |
+| October    | 1,121,215    |
+| May        |   923,973    |
+| February   |   810,442    |
+| January    |   785,874    |
+| March      |   754,501    |
+| April      |   669,391    |
+| August     |   659,311    |
+| December   |   634,679    |
+| September  |   584,724    |
+| July       |   514,876    |
+| June       |   454,757    |
+
 
 4. SALES BY PRODUCT LINE AND DEAL SIZE:
 ```sql
@@ -163,6 +188,17 @@ FROM
     ORDER_DETAILS
 GROUP BY 1;
 ```
+### Output:
+| Product Line       | Small Sales $ | Medium Sales $ | Large Sales $ |
+|-------------------|---------------|----------------|---------------|
+| Motorcycles       | 326,874       | 680,370        | 159,145       |
+| Classic Cars      | 692,715       | 2,430,258      | 796,642       |
+| Trucks and Buses  | 254,506       | 817,028        | 56,256        |
+| Vintage Cars      | 608,543       | 1,085,540      | 209,068       |
+| Planes            | 364,366       | 538,606        | 72,032        |
+| Ships             | 291,702       | 422,735        | 0             |
+| Trains            | 104,371       | 112,895        | 8,977         |
+
 
 5. SALES TREND ANALYSIS:
 ```sql
@@ -184,6 +220,30 @@ FROM
 GROUP BY 1, 2, 3
 ORDER BY 1, 2;
 ```
+### Output:
+| Year | Month | Month Name | Total Sales |
+|------|-------|------------|-------------|
+| 2003 | 1     | January    | 129,754     |
+| 2003 | 2     | February   | 140,836     |
+| 2003 | 3     | March      | 174,505     |
+| 2003 | 4     | April      | 201,610     |
+| 2003 | 5     | May        | 192,673     |
+| 2003 | 6     | June       | 168,083     |
+| 2003 | 7     | July       | 187,732     |
+| 2003 | 8     | August     | 197,809     |
+| 2003 | 9     | September  | 263,973     |
+| 2003 | 10    | October    | 568,291     |
+| 2003 | 11    | November   | 1,029,838   |
+| 2003 | 12    | December   | 261,876     |
+| 2004 | 1     | January    | 316,577     |
+| 2004 | 2     | February   | 311,420     |
+| 2004 | 3     | March      | 205,734     |
+| 2004 | 4     | April      | 206,148     |
+| 2004 | 5     | May        | 273,438     |
+| 2004 | 6     | June       | 286,674     |
+| 2004 | 7     | July       | 327,144     |
+| 2004 | 8     | August     | 461,501     |
+
 
 6. SALES BY WEEKDAY AND MARKET SHARE:
 ```sql
@@ -203,6 +263,17 @@ FROM
 GROUP BY 1
 ORDER BY 2 DESC;
 ```
+### OUTPUT:
+| Day       | Weekly Sales Comparison $ | Market Share % |
+|-----------|--------------------------|----------------|
+| Friday    | 2,140,654                | 21.3           |
+| Thursday  | 1,947,412                | 19.4           |
+| Wednesday | 1,947,146                | 19.4           |
+| Tuesday   | 1,900,773                | 18.9           |
+| Monday    | 1,254,535                | 12.5           |
+| Sunday    | 421,782                  | 4.2            |
+| Saturday  | 420,327                  | 4.2            |
+
 
 7. CUSTOMER SEGMENTATION (RFM):
 ```sql
@@ -240,6 +311,30 @@ SELECT
 FROM 
     RFM_COMBINATION_SCORE AS RC;
     ```
+### Output:
+| Customer Name                     | R Values | F Values | M Values | R Score | F Score | M Score | Total RMF | RFM Score Combination | Customer Segmentation     |
+|----------------------------------|----------|----------|----------|---------|---------|---------|-----------|---------------------|--------------------------|
+| Euro Shopping Channel             | 0        | 26       | 912,294  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Mini Gifts Distributors Ltd.      | 2        | 17       | 654,858  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Australian Collectors, Co.        | 183      | 5        | 200,995  | 3       | 1       | 1       | 5         | 311                 | PROMISING CUSTOMERS      |
+| Muscle Machine Inc                | 181      | 4        | 197,737  | 3       | 1       | 1       | 5         | 311                 | PROMISING CUSTOMERS      |
+| La Rochelle Gifts                 | 0        | 4        | 180,125  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Dragon Souveniers, Ltd.           | 90       | 5        | 172,990  | 4       | 1       | 1       | 6         | 411                 | POTENTIAL LOYALISTS      |
+| Land of Toys Inc.                 | 197      | 4        | 164,069  | 2       | 1       | 1       | 4         | 211                 | PROMISING CUSTOMERS      |
+| The Sharp Gifts Warehouse         | 39       | 4        | 160,010  | 5       | 2       | 1       | 8         | 521                 | OTHER                    |
+| AV Stores, Co.                    | 195      | 3        | 157,808  | 3       | 3       | 1       | 7         | 331                 | OTHER                    |
+| Anna's Decorations, Ltd           | 83       | 4        | 153,996  | 4       | 1       | 1       | 6         | 411                 | POTENTIAL LOYALISTS      |
+| Souveniers And Things Co.         | 2        | 4        | 151,571  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Corporate Gift Ideas Co.          | 97       | 4        | 149,882  | 4       | 1       | 1       | 6         | 411                 | POTENTIAL LOYALISTS      |
+| Salzburg Collectables             | 14       | 4        | 149,799  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Danish Wholesale Imports          | 46       | 5        | 145,042  | 5       | 1       | 1       | 7         | 511                 | POTENTIAL LOYALISTS      |
+| Saveley & Henriot, Co.            | 455      | 3        | 142,874  | 1       | 2       | 1       | 4         | 121                 | OTHER                    |
+| L'ordine Souveniers               | 21       | 3        | 142,601  | 5       | 2       | 1       | 8         | 521                 | OTHER                    |
+| Rovelli Gifts                     | 200      | 3        | 137,956  | 2       | 2       | 1       | 5         | 221                 | OTHER                    |
+| Reims Collectables                | 62       | 5        | 135,043  | 4       | 1       | 1       | 6         | 411                 | POTENTIAL LOYALISTS      |
+| Scandinavian Gift Ideas           | 89       | 3        | 134,259  | 4       | 4       | 1       | 9         | 441                 | LOYAL CUSTOMERS           |
+| Online Diecast Creations Co.      | 208      | 3        | 131,685  | 2       | 2       | 2       | 6         | 222                 | OTHER                    |
+
 
 8. CUSTOMER SALES SEGMENTATION BY COUNTRY:
 ```sql
